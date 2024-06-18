@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b41ed31c-8e3b-4d4d-a249-626e53fb4789" name="Changes" comment="" />
+    <list default="true" id="25ed1d43-cd0f-44be-a4ae-3ad04348df45" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -13,6 +13,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="Enum" />
+        <option value="Interface" />
         <option value="Class" />
       </list>
     </option>
@@ -28,49 +30,56 @@
     </option>
   </component>
   <component name="ProjectColorInfo">{
-  &quot;associatedIndex&quot;: 0
+  &quot;associatedIndex&quot;: 3
 }</component>
-  <component name="ProjectId" id="2frcHDzTjRvmEauhOOUoSWhEkoE" />
+  <component name="ProjectId" id="2f0FJb0McEbuRgsrBf1aTRMK1zD" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Maven.zh2t [install].executor": "Run",
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "Spring Boot.Zh2tApplication.executor": "Run",
-    "git-widget-placeholder": "master",
-    "ignore.virus.scanning.warn.message": "true",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/HP User/Desktop/SpringBootWebSockets-Web_Chat_part02",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "configurable.group.appearance",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Maven.zh2t [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.zh2t [compile].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.zh2t [install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.zh2t [package].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.zh2t [validate].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.zh2t [verify].executor&quot;: &quot;Run&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;Spring Boot.Zh2tApplication.executor&quot;: &quot;Run&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/HP User/Desktop/gradApi/userNoteAppJWT1&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  },
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;mysql&quot;
+    ]
   }
-}]]></component>
+}</component>
   <component name="ReactorSettings">
     <option name="notificationShown" value="true" />
   </component>
+  <component name="RecentsManager">
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="com.example.zh2t.models" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration default="true" type="JetRunConfigurationType">
-      <module name="userNoteAppJWT1" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
-      <module name="userNoteAppJWT1" />
-      <option name="filePath" />
+      <module name="userNoteAppJWT" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -84,37 +93,38 @@
       </method>
     </configuration>
   </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="jdk-21.0.2-openjdk-21.0.2-4caba194b151-4f524021" />
+      </set>
+    </attachedChunks>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="b41ed31c-8e3b-4d4d-a249-626e53fb4789" name="Changes" comment="" />
-      <created>1714562548358</created>
+      <changelist id="25ed1d43-cd0f-44be-a4ae-3ad04348df45" name="Changes" comment="" />
+      <created>1712930018834</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1714562548358</updated>
-      <workItem from="1714562549577" duration="16199000" />
-      <workItem from="1714727165148" duration="608000" />
-      <workItem from="1714840196128" duration="2388000" />
-      <workItem from="1714930543305" duration="951000" />
-      <workItem from="1715016187894" duration="1328000" />
-      <workItem from="1715182942538" duration="3314000" />
-      <workItem from="1715282275736" duration="1008000" />
-      <workItem from="1715286050313" duration="2040000" />
-      <workItem from="1715795181845" duration="56000" />
-      <workItem from="1716134193610" duration="4752000" />
-      <workItem from="1716140038865" duration="167000" />
-      <workItem from="1716141682969" duration="1532000" />
-      <workItem from="1716145715547" duration="1135000" />
-      <workItem from="1716280692017" duration="10506000" />
-      <workItem from="1716400147518" duration="394000" />
-      <workItem from="1716492394721" duration="4212000" />
-      <workItem from="1716703844406" duration="1777000" />
-      <workItem from="1717186440612" duration="1043000" />
-      <workItem from="1717332444425" duration="1462000" />
-      <workItem from="1717349481610" duration="687000" />
-      <workItem from="1718452049054" duration="2009000" />
-      <workItem from="1718617867413" duration="994000" />
-      <workItem from="1718622073823" duration="6900000" />
+      <updated>1712930018834</updated>
+      <workItem from="1712930019872" duration="15963000" />
+      <workItem from="1713001348605" duration="10827000" />
+      <workItem from="1713017500255" duration="298000" />
+      <workItem from="1713018079614" duration="11282000" />
+      <workItem from="1713079723338" duration="16581000" />
+      <workItem from="1713169279539" duration="9999000" />
+      <workItem from="1713205944145" duration="13955000" />
+      <workItem from="1713261766378" duration="827000" />
+      <workItem from="1713280823844" duration="14110000" />
+      <workItem from="1713949234857" duration="31000" />
+      <workItem from="1713989402373" duration="12000" />
+      <workItem from="1714332314533" duration="65000" />
+      <workItem from="1714386658625" duration="3020000" />
+      <workItem from="1714411864447" duration="6206000" />
+      <workItem from="1714509030090" duration="9742000" />
+      <workItem from="1714562102343" duration="441000" />
+      <workItem from="1716133934064" duration="243000" />
     </task>
     <servers />
   </component>
@@ -122,124 +132,15 @@
     <option name="version" value="3" />
   </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-method">
-          <url>file://$PROJECT_DIR$/src/main/java/com/example/zh2t/service/NoteService.java</url>
-          <line>23</line>
-          <properties class="com.example.zh2t.service.NoteService" method="getNumberOfSavings">
-            <option name="EMULATED" value="true" />
-            <option name="WATCH_EXIT" value="false" />
-          </properties>
-          <option name="timeStamp" value="3" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-method">
-          <url>file://$PROJECT_DIR$/src/main/java/com/example/zh2t/service/UserServiceImpl.java</url>
-          <line>348</line>
-          <properties class="com.example.zh2t.service.UserServiceImpl" method="addNoteToUser">
-            <option name="EMULATED" value="true" />
-            <option name="WATCH_EXIT" value="false" />
-          </properties>
-          <option name="timeStamp" value="5" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-method">
-          <url>file://$PROJECT_DIR$/src/main/java/com/example/zh2t/service/UserService.java</url>
-          <line>33</line>
-          <properties class="com.example.zh2t.service.UserService" method="getAllUserNotes">
-            <option name="EMULATED" value="true" />
-            <option name="WATCH_EXIT" value="false" />
-          </properties>
-          <option name="timeStamp" value="23" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/example/zh2t/service/UserServiceImpl.java</url>
-          <line>349</line>
-          <option name="timeStamp" value="6" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/example/zh2t/service/UserServiceImpl.java</url>
-          <line>350</line>
-          <option name="timeStamp" value="7" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/example/zh2t/service/UserServiceImpl.java</url>
-          <line>351</line>
-          <option name="timeStamp" value="8" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/example/zh2t/service/UserServiceImpl.java</url>
-          <line>352</line>
-          <option name="timeStamp" value="9" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/example/zh2t/service/UserServiceImpl.java</url>
-          <line>354</line>
-          <option name="timeStamp" value="10" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/example/zh2t/service/UserServiceImpl.java</url>
-          <line>355</line>
-          <option name="timeStamp" value="11" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/example/zh2t/service/UserServiceImpl.java</url>
-          <line>356</line>
-          <option name="timeStamp" value="12" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/example/zh2t/service/UserServiceImpl.java</url>
-          <line>357</line>
-          <option name="timeStamp" value="13" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/example/zh2t/service/UserServiceImpl.java</url>
-          <line>358</line>
-          <option name="timeStamp" value="14" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/example/zh2t/service/UserServiceImpl.java</url>
-          <line>359</line>
-          <option name="timeStamp" value="15" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/example/zh2t/service/UserServiceImpl.java</url>
-          <line>246</line>
-          <properties>
-            <option name="lambda-ordinal" value="-1" />
-          </properties>
-          <option name="timeStamp" value="25" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/example/zh2t/service/UserServiceImpl.java</url>
-          <line>247</line>
-          <option name="timeStamp" value="26" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/example/zh2t/service/UserServiceImpl.java</url>
-          <line>248</line>
-          <option name="timeStamp" value="27" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/example/zh2t/service/UserServiceImpl.java</url>
-          <line>249</line>
-          <option name="timeStamp" value="28" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/example/zh2t/service/UserServiceImpl.java</url>
-          <line>252</line>
-          <option name="timeStamp" value="29" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/example/zh2t/service/UserServiceImpl.java</url>
-          <line>253</line>
-          <option name="timeStamp" value="30" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/example/zh2t/service/UserServiceImpl.java</url>
-          <line>254</line>
-          <option name="timeStamp" value="31" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <watches-manager>
+      <configuration name="SpringBootApplicationConfigurationType">
+        <watch expression="user" language="JAVA" />
+        <watch expression="user" />
+        <watch expression="id" />
+        <watch expression="authHeader" />
+        <watch expression="request" />
+        <watch expression="token" />
+      </configuration>
+    </watches-manager>
   </component>
 </project>
