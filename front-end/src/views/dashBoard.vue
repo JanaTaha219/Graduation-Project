@@ -50,10 +50,7 @@ import { useRouter } from "vue-router";
 
 const router = useRouter();
 const dm = () => {
-  const token = "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJqYW5hIiwicm9sZXMiOiJST0xFX1VTRVIiLCJpYXQiOjE3MTg3MTQ1MTAsImV4cCI6MTcxODgwMDkxMH0.t8FO8OBC8FtUlnTBfmp7FrniAEstMp46h6KISSup-fv5mcvxzlIsbXIjrltkkcg2";
-
-  // Redirect to React app with token as query parameter
-  window.location.href = `http://localhost:3000/?token=${encodeURIComponent(token)}`;
+  router.push({ path: "/dm" });
 };
 const profile = () => {
   router.push({ path: "/profile" });

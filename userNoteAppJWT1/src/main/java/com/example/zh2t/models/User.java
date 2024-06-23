@@ -43,7 +43,7 @@ public class User {
    private Set<User> followers = new HashSet<>();
 
    @ManyToMany
-   @JoinTable(name = "followers",
+   @JoinTable(name = "follower",
            joinColumns = @JoinColumn(name = "follower_id"),
            inverseJoinColumns = @JoinColumn(name = "following_id"))
   // @JsonBackReference

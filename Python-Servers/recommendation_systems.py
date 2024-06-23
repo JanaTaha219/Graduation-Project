@@ -121,7 +121,7 @@ similarity = cosine_similarity_between_texts(text1, text2, False)
 print("Cosine Similarity between Text 1 and Text 2 with stemming:", similarity)
 
 
-# In[1]:
+# In[44]:
 
 
 import mysql.connector
@@ -138,7 +138,7 @@ def get_all_users_note_except_user_and_followed(username_to_exclude):
     # Fetch the list of users that the specified user follows
     cursor.execute(f"""
         SELECT following_id
-        FROM followers
+        FROM follower
         WHERE follower_id = '{username_to_exclude}'
     """)
     followed_users = cursor.fetchall()
@@ -170,7 +170,7 @@ for post in all_users_post_except_specific_user:
     print(post[2])
 
 
-# In[99]:
+# In[11]:
 
 
 def get_all_user_posts(username):
@@ -181,11 +181,149 @@ def get_all_user_posts(username):
     return posts_as_strings
 
 
-# In[100]:
+# In[52]:
+
+
+def get_all_user_saved(user_id):
+    db = mysql.connector.connect(
+        user='root',
+        password='Jana2003?',
+        host='127.0.0.1',
+        database='grad',
+        auth_plugin='mysql_native_password'
+    )
+    cursor = db.cursor()
+
+    try:
+        # SQL query to select note_id and text for the specific user
+        query = """
+        SELECT note.text
+        FROM note
+        WHERE note.user_id = %s
+        """
+        cursor.execute(query, (user_id,))
+
+        # Fetch all results
+        results = cursor.fetchall()
+
+        # Extract note texts from results
+        note_texts = [note_text[0] for note_text in results]
+
+        return note_texts
+
+    except mysql.connector.Error as err:
+        print(f"Error: {err}")
+        return []
+    finally:
+        # Close the cursor and the database connection
+        cursor.close()
+        db.close()
+
+
+# In[ ]:
+
+
+def get_all_notes(user_id):
+    try:
+        # Connect to the database
+        db = mysql.connector.connect(
+            user='root',
+            password='?',
+            host='127.0.0.1',
+            database='grad',
+            auth_plugin='mysql_native_password'
+        )
+        
+        cursor = db.cursor()
+
+        # Query to fetch notes from users that are not followed by the user
+        query = """
+        SELECT n.text 
+        FROM note n
+        LEFT JOIN follower f ON n.user_id = f.following_id AND f.follower_id = %s
+        WHERE f.following_id IS NULL
+        """
+        
+        cursor.execute(query, (user_id,))
+        
+        # Fetch all results
+        notes = cursor.fetchall()
+        
+        # Close the cursor and connection
+        cursor.close()
+        db.close()
+        
+        # Return the list of notes
+        return [note[0] for note in notes]
+    
+    except mysql.connector.Error as err:
+        print(f"Error: {err}")
+        return []
+
+
+# In[59]:
+
+
+def get_liked_notes(user_id):
+    db = mysql.connector.connect(
+        user='root',
+        password='Jana2003?',
+        host='127.0.0.1',
+        database='grad',
+        auth_plugin='mysql_native_password'
+    )
+    cursor = db.cursor()
+
+    try:
+        # SQL query to select note.text for the notes liked by the specific user
+        query = """
+        SELECT note.text
+        FROM note
+        JOIN likes ON note.id = likes.note_id
+        WHERE likes.user_id = %s
+        """
+        cursor.execute(query, (user_id,))
+
+        # Fetch all results
+        results = cursor.fetchall()
+
+        # Extract note texts from results
+        note_texts = [note_text[0] for note_text in results]
+
+        return note_texts
+
+    except mysql.connector.Error as err:
+        print(f"Error: {err}")
+        return []
+    finally:
+        # Close the cursor and the database connection
+        cursor.close()
+        db.close()
+
+
+# In[60]:
+
+
+get_liked_notes("aa")
+
+
+# In[56]:
+
+
+get_all_user_saved("aa")
+
+
+# In[61]:
 
 
 def recommend_user_posts_using_cosine(user_name, number_of_posts):
     user_posts = get_all_user_posts(user_name)
+    if len(user_posts) == 0:
+        user_posts = get_all_user_saved(user_name)
+        if len(user_posts) == 0:
+            user_posts = get_liked_notes(user_name)
+            if len(user_posts) == 0:
+                user_posts=get_all_notes(user_name)
 
     # Get all other users' posts
     other_users_posts = get_all_users_note_except_user_and_followed(user_name)
@@ -221,13 +359,13 @@ def recommend_user_posts_using_cosine(user_name, number_of_posts):
     return recommendations[:number_of_posts]
 
 
-# In[101]:
+# In[62]:
 
 
-recommend_user_posts_using_cosine("aa",5)
+recommend_user_posts_using_cosine("rama", 5)
 
 
-# In[102]:
+# In[63]:
 
 
 import numpy as np
@@ -258,7 +396,7 @@ def euclidean_similarity_between_texts(text1, text2, limm=True):
     return similarity
 
 
-# In[103]:
+# In[15]:
 
 
 def recommend_user_posts_using_euclidean_distances(user_name, number_of_posts):
@@ -471,7 +609,6 @@ def get_category(prompt):
 # In[3]:
 
 
-
 #get_category("Is machine learning a part of Artificial Intelligence, sports, cooking, or something else? If it's something else, what is it? Just wirte the topic only")
 
 
@@ -526,7 +663,7 @@ def categorize_topic(topic):
         categories_str = ", ".join(quiz_types)
         query = f"Is {topic} a part of {categories_str}, or something else? If it's something else, what is it? Just write the topic only"
     
-    print("category:", get_category(query))
+ #   print("category:", get_category(query))
     return get_category(query)
 
 
@@ -617,7 +754,7 @@ def get_unfollowed_users_with_avg_above_2(user_name):
             ) AND m.unique_name != %s
             AND m.unique_name NOT IN (
                 SELECT f.following_id
-                FROM followers f
+                FROM follower f
                 WHERE f.follower_id = %s
             )
             GROUP BY m.unique_name
@@ -657,7 +794,7 @@ for user, avg_mark in users_with_avg_marks_above:
 def get_unfollowed_users_with_avg_above_2(quiz_type, user_unique_name):
     connection = get_db_connection()
     cursor = connection.cursor(dictionary=True)
-    quiz_type = categorize_topic(quiz_type)
+    
     # Fetch the users who had a test on the given subject and their average mark is > 2
     query = """
     SELECT m.unique_name, AVG(m.mark) as average_mark
@@ -675,7 +812,7 @@ def get_unfollowed_users_with_avg_above_2(quiz_type, user_unique_name):
     # Fetch the users followed by the given user
     query = """
     SELECT f.following_id
-    FROM followers f
+    FROM follower f
     WHERE f.follower_id = %s
     """
     

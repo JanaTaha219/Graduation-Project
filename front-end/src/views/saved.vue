@@ -1,54 +1,49 @@
 <template>
-  <button @click="home()">home</button>
-  <div class="notes-section">
-    <div class="container">
-      <ul class="note-list">
-        <li v-for="note in notes" :key="note.id" class="note-item">
-          <div class="note-content">
-            <div class="note-header">
-              <!-- Removed note.uniqueName since it's not in the provided data -->
-            </div>
-            <p class="note-text">{{ note.uniqueName }}</p>
-            <p class="note-text">{{ note.text }}</p>
-            <p class="note-comment">{{ note.userComment }}</p>
-            <a :href="note.url" target="_blank" class="note-url">{{
-              note.url
-            }}</a>
-            <p class="note-time">
-              {{ new Date(note.creationTime).toLocaleString() }}
-            </p>
-          </div>
-          <div class="note-actions">
-            <icon-wrapper
-              @click="like(note)"
-              iconCode="solar:heart-linear"
-              class="button-icon"
-            ></icon-wrapper>
-            <icon-wrapper
-              iconCode="mingcute:save-line"
-              class="button-icon"
-            ></icon-wrapper>
-          </div>
-        </li>
-      </ul>
-    </div>
+  <div>
+    <h2
+      v-if="followingPageData.data && followingPageData.data.saved.length > 0"
+      class="title"
+    >
+      Saved Notes
+    </h2>
+    <ul
+      class="note-list"
+      v-if="followingPageData.data && followingPageData.data.saved.length > 0"
+    >
+      <li
+        v-for="(note, index) in followingPageData.data.saved"
+        :key="index"
+        class="note-card"
+      >
+        <div class="note-details">
+          <p>{{ note.user.uniqueName }}</p>
+
+          <p>
+            <a :href="note.url" target="_blank" class="url">{{ note.url }}</a>
+          </p>
+          <p>{{ note.text }}</p>
+          <p>{{ note.userComment }}</p>
+          <p>{{ note.creationTime }}</p>
+        </div>
+      </li>
+    </ul>
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from "vue";
-import iconWrapper from "../components/iconWrapper.vue";
-import { useRouter } from "vue-router";
 
-const router = useRouter();
-const notes = ref([]);
-const home = () => {
-  router.push({ path: "/dashboard" });
-};
-const getNotes = async () => {
+const currentUserData = ref({});
+const userDetails = ref(null);
+const followingPageData = ref({ notes: [] });
+
+const fetchUserData = async () => {
   try {
+    // Fetch current user data
     const token = localStorage.getItem("token");
-    if (!token) throw new Error("Token not found");
+    if (!token) {
+      throw new Error("Token not found");
+    }
 
     const response = await fetch(
       "http://localhost:8081/api/v1/users/currentUser",
@@ -61,78 +56,64 @@ const getNotes = async () => {
       }
     );
 
-    if (!response.ok) throw new Error("Failed to fetch current user data");
+    if (!response.ok) {
+      throw new Error("Failed to fetch current user data");
+    }
 
     const data = await response.json();
-    const userEndpoint = `http://localhost:8081/api/v1/users/saved/${data.data.userName}`;
-    const userResponse = await fetch(userEndpoint, {
+    currentUserData.value = data.data;
+    userDetails.value = data.data;
+
+    // Fetch user details using the constructed endpoint URL
+    const followingPageUrl = `http://localhost:8081/api/v1/users/saved/${currentUserData.value.userName}`;
+    const followingPageResponse = await fetch(followingPageUrl, {
+      method: "GET",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
     });
-
-    if (!userResponse.ok) throw new Error("Failed to fetch user details");
-
-    const userDetailsData = await userResponse.json();
-    notes.value = userDetailsData.data.saved;
-    console.log(notes.value);
+    if (!followingPageResponse.ok) {
+      throw new Error("Failed to fetch following page data");
+    }
+    followingPageData.value = await followingPageResponse.json();
+    console.log("Following Page Data:", followingPageData.value);
   } catch (error) {
-    console.error("Error fetching user data:", error.message);
+    console.error("Error fetching data:", error);
   }
 };
 
-onMounted(() => {
-  getNotes();
-});
+onMounted(fetchUserData);
 </script>
-
-<style scoped>
-.profile {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px;
-}
-
-.user-info {
-  background-color: #f8f8f8;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  max-width: 600px;
+<style>
+.user-details {
+  background-color: #f0f0f0;
+  padding: 10px;
   margin-bottom: 20px;
 }
 
-.user-info h1 {
-  font-size: 32px;
-  color: #333;
-  margin-bottom: 20px;
+.title-container {
   text-align: center;
+  position: relative;
+  margin-bottom: 20px;
 }
 
-.user-info ul {
-  list-style-type: none;
-  padding: 0;
+.title {
+  background-color: #ffffff;
+  padding: 0 20px;
+  position: relative;
+  display: inline-block;
+  z-index: 1;
+}
+
+.title-line {
+  position: absolute;
   width: 100%;
-}
-
-.name-item {
-  font-size: 30px;
-}
-
-.notes-section {
-  width: 100%;
-}
-
-.container {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
-  background-color: #f9f9f9;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  top: 50%;
+  left: 0;
+  height: 1px;
+  background-color: #ddd;
+  z-index: 0;
 }
 
 .note-list {
@@ -140,89 +121,40 @@ onMounted(() => {
   padding: 0;
 }
 
-.note-item {
-  background-color: #ffffff;
-  margin-bottom: 15px;
-  padding: 15px;
+.note-card {
+  background-color: #fff;
   border: 1px solid #ddd;
   border-radius: 5px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s ease-in-out;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
+  margin-bottom: 15px;
 }
 
-.note-item:hover {
-  transform: translateY(-5px);
+.note-card:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.note-content {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+.note-details {
+  padding: 15px;
 }
 
-.note-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
+.note-details p {
+  margin: 0;
 }
 
-.note-username {
-  font-size: 1.2em;
+.note-details p:not(:last-child) {
+  margin-bottom: 8px;
+}
+
+.note-details strong {
   font-weight: bold;
-  color: #333;
-  margin-bottom: 5px;
 }
 
-.note-text {
-  font-size: 1em;
-  color: #555;
-  margin-bottom: 10px;
-}
-.note-comment {
-  font-size: 0.9em;
-  color: #777;
-  margin-bottom: 10px;
+.note-details a {
+  color: #007bff;
 }
 
-.note-url {
-  font-size: 0.9em;
-  color: #1e90ff;
-  margin-bottom: 10px;
-}
-
-.note-time {
-  font-size: 0.8em;
-  color: #aaa;
-}
-
-.note-actions {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.button-icon {
-  cursor: pointer;
-  color: #ff6b6b;
-  font-size: 1.2em;
-  margin-top: 5px;
-}
-
-.dashboard-button {
-  background-color: #ff6b6b;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.dashboard-button:hover {
-  background-color: #e55a5a;
+.url {
+  text-align: right;
+  margin-right: -20px;
 }
 </style>

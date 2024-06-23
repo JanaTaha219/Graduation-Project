@@ -11,7 +11,6 @@ import profile from "../views/profile.vue";
 import saved from "../views/saved.vue";
 import following from "../components/following.vue";
 import follower from "../components/follower.vue";
-import ForgotPassword from "../views/ForgetPassword.vue";
 
 const routes = [
   {
@@ -19,8 +18,6 @@ const routes = [
     name: "logIn",
     component: logIn,
   },
-  { path: "/forgot-password", component: ForgotPassword },
-
   {
     path: "/following",
     name: "following",

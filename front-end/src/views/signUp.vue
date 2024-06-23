@@ -95,6 +95,7 @@ const signup = async () => {
         password: password.value,
         birthDate: birthday.value,
         bio: bio.value,
+        role:"ROLE_USER"
       }),
     });
     if (!response.ok) {

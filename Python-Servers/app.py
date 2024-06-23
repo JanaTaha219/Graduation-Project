@@ -1,7 +1,9 @@
 from flask import Flask, request, jsonify
 from recommendation_systems import recommend_user_posts_using_cosine, recommend_user_posts_using_euclidean_distances, recommend_user_posts_using_dot_product, preprocess_text, apply_lemmatization, extract_keywords_using_rake, extract_keywords_using_keybert, add_mark, get_unfollowed_users_with_avg_above_2
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app, origins=['http://localhost:5173'])
 
 @app.route('/api/predict', methods=['POST'])
 def api_predict():

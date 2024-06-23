@@ -2,6 +2,7 @@ package com.example.zh2t.controllers;
 
 import com.example.zh2t.BasicResponce.BasicMessageResponse;
 import com.example.zh2t.DTOs.NoteDTO;
+import com.example.zh2t.DTOs.NoteDto2;
 import com.example.zh2t.DTOs.UserDTOP;
 import com.example.zh2t.Mappers.EntityDtoConverter;
 import com.example.zh2t.models.*;
@@ -23,6 +24,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @RestController
 @CrossOrigin
@@ -47,6 +49,10 @@ public class UserController {
     EntityDtoConverter entityDtoConverter;
 
 
+    @GetMapping("/likedBy/{uniquename}")
+    public List<NoteDto2> notesLikedByUser(@PathVariable String uniquename){
+        return userService.notesLikedByUser(uniquename);
+    }
     @GetMapping("/out")
     public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication, @AuthenticationPrincipal SecurityUser securityUser) {
         return userService.logout(request, response, authentication, securityUser);

@@ -162,6 +162,17 @@ public class UserServiceImpl implements UserService {
         return new ResponseEntity<>(new BasicMessageResponse("message", "logged out successfully", 200), HttpStatus.OK);
     }
 
+    public List<NoteDto2> notesLikedByUser(String username){
+        List<NoteDto2> notes = getUserById(username).get().getLikedNotes().stream().map(
+                note-> {
+                    NoteDto2 x = entityDtoConverter.convertToDto(note, NoteDto2.class);
+                    x.setUniqueName(note.getUser().getUniqueName());
+                    return x;
+                }
+        ).collect(Collectors.toList());
+        return notes;
+    }
+
     @Transactional
     public  ResponseEntity<?> deleteUser(String id, SecurityUser securityUser){
         Optional<User> user = userRepo.findById(id);

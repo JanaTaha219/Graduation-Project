@@ -2,8 +2,10 @@ from flask import Flask, request, jsonify
 import requests
 import json
 import random
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app, origins=['http://localhost:5173'])
 
 @app.route('/generate-quiz', methods=['POST'])
 def generate_quiz():
@@ -55,4 +57,4 @@ def generate_quiz():
         return jsonify({"error": "Failed to generate quiz"}), response.status_code
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port =5001)

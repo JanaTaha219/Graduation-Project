@@ -1,6 +1,7 @@
 package com.example.zh2t.service;
 
 import com.example.zh2t.BasicResponce.BasicMessageResponse;
+import com.example.zh2t.DTOs.NoteDto2;
 import com.example.zh2t.DTOs.UserDTOP;
 import com.example.zh2t.models.*;
 import jakarta.mail.MessagingException;
@@ -8,11 +9,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 public interface UserService {
     public ResponseEntity<BasicMessageResponse> logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication, SecurityUser securityUser);
@@ -51,4 +54,5 @@ public interface UserService {
     public boolean doesUserLikeNote(String uniqueName, int noteId);
     public boolean doesUserSaveNote(String uniqueName, int noteId);
     public List<UserDTOP> findUsersWithUniqueNameLike(String uniqueName);
+    public List<NoteDto2> notesLikedByUser(String uniquename);
 }
