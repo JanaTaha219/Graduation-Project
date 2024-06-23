@@ -5,29 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="25ed1d43-cd0f-44be-a4ae-3ad04348df45" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../Python-Servers/.ipynb_checkpoints/recommendation systems-checkpoint.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../Python-Servers/.ipynb_checkpoints/recommendation systems-checkpoint.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Python-Servers/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/../Python-Servers/app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Python-Servers/quiz-generator.py" beforeDir="false" afterPath="$PROJECT_DIR$/../Python-Servers/quiz-generator.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Python-Servers/recommendation systems.ipynb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Python-Servers/recommendation_systems.py" beforeDir="false" afterPath="$PROJECT_DIR$/../Python-Servers/recommendation_systems.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front-end/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/../front-end/app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front-end/recommendation systems.ipynb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front-end/recommendation_systems.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front-end/src/components/modalProfile.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../front-end/src/components/modalProfile.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front-end/src/router/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../front-end/src/router/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front-end/src/views/ForgetPassword.vue" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front-end/src/views/dashBoard.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../front-end/src/views/dashBoard.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front-end/src/views/logIn.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../front-end/src/views/logIn.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front-end/src/views/saved.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../front-end/src/views/saved.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../my-chat-app/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../my-chat-app/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../my-chat-app/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../my-chat-app/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/zh2t/Zh2tApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/zh2t/Zh2tApplication.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/zh2t/controllers/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/zh2t/controllers/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/zh2t/models/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/zh2t/models/User.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/zh2t/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/zh2t/service/UserService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/zh2t/service/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/zh2t/service/UserServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -172,6 +153,7 @@
       <workItem from="1719078182414" duration="2396000" />
       <workItem from="1719090947380" duration="1582000" />
       <workItem from="1719128821042" duration="2496000" />
+      <workItem from="1719167839410" duration="1771000" />
     </task>
     <servers />
   </component>

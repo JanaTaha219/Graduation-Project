@@ -409,6 +409,10 @@ public class UserServiceImpl implements UserService {
     public ResponseEntity<BasicMessageResponse> getFollowingCount(String userId){
         return new ResponseEntity<>(new BasicMessageResponse("following",getUserById(userId).get().getFollowing().size(),200), HttpStatus.OK);
     }
+    public boolean isFollowedBy(String userA, String userB){
+        User b = getUserById(userB).get();
+        return b.getFollowing().contains(getUserById(userA).get());
+    }
 
     //Does A follow B?
     public Boolean isFollowing(String userAId, String userBId){

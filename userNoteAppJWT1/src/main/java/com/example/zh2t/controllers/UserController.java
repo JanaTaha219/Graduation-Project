@@ -53,6 +53,10 @@ public class UserController {
     public List<NoteDto2> notesLikedByUser(@PathVariable String uniquename){
         return userService.notesLikedByUser(uniquename);
     }
+    @GetMapping("{userA}/followedBy/{userB}")
+    public boolean isFollowedBy(@PathVariable String userA, @PathVariable String userB){
+        return userService.isFollowedBy(userA, userB);
+    }
     @GetMapping("/out")
     public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication, @AuthenticationPrincipal SecurityUser securityUser) {
         return userService.logout(request, response, authentication, securityUser);

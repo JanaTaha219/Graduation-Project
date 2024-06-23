@@ -55,4 +55,5 @@ public interface UserService {
     public boolean doesUserSaveNote(String uniqueName, int noteId);
     public List<UserDTOP> findUsersWithUniqueNameLike(String uniqueName);
     public List<NoteDto2> notesLikedByUser(String uniquename);
+    public boolean isFollowedBy(String userA, String userB);
 }
