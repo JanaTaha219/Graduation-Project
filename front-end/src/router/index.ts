@@ -9,8 +9,14 @@ import fl from "../components/fl.vue";
 import dm from "../views/dm.vue";
 import profile from "../views/profile.vue";
 import saved from "../views/saved.vue";
+import tryy from "../views/tryy.vue";
+
+import liked from "../views/liked.vue";
+import UserProfile from "../components/UserProfile.vue";
 import following from "../components/following.vue";
 import follower from "../components/follower.vue";
+import ForgotPassword from "../views/ForgetPassword.vue";
+import result from "../views/result.vue";
 
 const routes = [
   {
@@ -18,10 +24,18 @@ const routes = [
     name: "logIn",
     component: logIn,
   },
+  { path: "/forgot-password", component: ForgotPassword },
+
   {
     path: "/following",
     name: "following",
     component: following,
+  },
+  { path: "/result", name: "result", component: result },
+  {
+    path: "/tryy",
+    name: "tryy",
+    component: tryy,
   },
   {
     path: "/follower",
@@ -37,6 +51,16 @@ const routes = [
     path: "/saved",
     name: "saved",
     component: saved,
+  },
+  {
+    path: "/UserProfile",
+    name: "UserProfile",
+    component: UserProfile,
+  },
+  {
+    path: "/liked",
+    name: "liked",
+    component: liked,
   },
   {
     path: "/dm",

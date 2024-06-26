@@ -1,4 +1,5 @@
 <template>
+  <button @click="home()">home</button>
   <div class="profile">
     <div class="user-info">
       <div v-if="userDetails">
@@ -13,10 +14,10 @@
           </li>
         </ul>
         <button @click="getFollowing()">
-          Following: {{ userDetails3.data.following }}
+          Following: {{ userDetails3?.data?.following ?? 0 }}
         </button>
         <button @click="getFollowers()">
-          Followers: {{ userDetails2.data.followers }}
+          Followers: {{ userDetails2?.data?.followers ?? 0 }}
         </button>
         <button @click="showEditProfile = true" class="edit-profile-button">
           Edit Profile
@@ -95,7 +96,9 @@ import modalComp from "../components/modal.vue";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
-
+const home = async () => {
+  router.push({ path: "/dashBoard" });
+};
 const currentUserData = ref({});
 const userDetails2 = ref(null);
 const userDetails3 = ref(null);
@@ -258,7 +261,7 @@ const fetchUserData = async () => {
     });
 
     if (!userResponse.ok) throw new Error("Failed to fetch user details");
-
+    console.log("user", currentUserData.value.userName);
     const userDetailsData = await userResponse.json();
     userDetails.value = userDetailsData;
 
@@ -284,20 +287,17 @@ const editProfile = async () => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({
-          email: editForm.value.email,
-          bio: editForm.value.bio,
-          birthDate: editForm.value.birthDate,
-        }),
+        body: JSON.stringify(editForm.value),
       }
     );
 
     if (!response.ok) throw new Error("Failed to update user profile");
 
-    // Fetch the updated user data
-    await fetchUserData();
-
-    // Close the modal
+    const updatedUserData = await response.json();
+    userDetails.value = updatedUserData;
+    currentUserData.value.email = updatedUserData.email;
+    currentUserData.value.bio = updatedUserData.bio;
+    currentUserData.value.birthDate = updatedUserData.birthDate;
     showEditProfile.value = false;
   } catch (error) {
     console.error("Error updating user profile:", error.message);
@@ -306,9 +306,9 @@ const editProfile = async () => {
 
 onMounted(() => {
   fetchUserData();
+  getNotes();
   numberOffollowing();
   numberOffollowers();
-  getNotes();
 });
 </script>
 

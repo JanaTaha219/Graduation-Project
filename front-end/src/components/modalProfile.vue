@@ -1,207 +1,88 @@
 <template>
-  <div v-if="modalActive" class="modal-overlay" @click.self="close">
-    <div class="modal-content">
-      <button @click="close" class="close-button">&times;</button>
-      <div class="modal-buttons">
-        <button
-          @click="rake"
-          :class="{ active: lastClickedButton === 'rake' }"
-          class="modal-button"
+  <div>
+    <div v-for="(question, questionIndex) in userName" :key="questionIndex">
+      <p>{{ question.value }}</p>
+      <ul>
+        <li
+          v-for="(choice, choiceIndex) in question.choices"
+          :key="choiceIndex"
         >
-          rake
-        </button>
-        <button
-          @click="keybert"
-          :class="{ active: lastClickedButton === 'keybert' }"
-          class="modal-button"
-        >
-          keybert
-        </button>
-      </div>
-      <div v-if="lastClickedButton">
-        <h3>{{ lastClickedButton }}</h3>
-      </div>
-      <div v-if="apiResult.length">
-        <div class="result-buttons">
-          <button
-            v-for="result in apiResult"
-            :key="result"
-            class="result-button"
-            @click="generateQuiz(result)"
-          >
-            {{ result }}
-          </button>
-        </div>
-      </div>
-      <div v-if="chatGPTResult && chatGPTResult.quizzes ">
-      <p>hhh</p>
-        <h3>{{quizData }}</h3>
-        <div v-for="quiz in chatGPTResult.quizzes" :key="quiz.title">
-          <div v-for="(question, index) in quiz.questions" :key="question.id" class="quiz-question">
-            <p class="question-text">{{ index + 1 }}. {{ question.value }}</p>
-            <div v-if="question.type === 'mc'" class="choices">
-              <div v-for="choice in question.choices" :key="choice.value" class="choice-item">
-                <input
-                  type="radio"
-                  :id="question.id + '-' + choice.value"
-                  :name="'question-' + question.id"
-                  :value="choice.value"
-                />
-                <label :for="question.id + '-' + choice.value" class="choice-label">{{ choice.value }}</label>
-              </div>
-            </div>
-          </div>
-        </div>
-        <button @click="compareAnswers" class="compare-button">Check Answers</button>
-      </div>
-      <ResultModal
-        :show="showResult"
-        :score="score"
-        :subject="selectedQuiz"
-        :quizData="chatGPTResult"
-        @close="showResult = false"
-      />
+          <input
+            type="radio"
+            :name="'question-' + questionIndex"
+            :id="'question-' + questionIndex + '-choice-' + choiceIndex"
+            :value="choice.value"
+          />
+          <label :for="'question-' + questionIndex + '-choice-' + choiceIndex">
+            {{ choice.value }}
+          </label>
+        </li>
+      </ul>
+    </div>
+    <button @click="compareAnswers">Check Answers</button>
+    <div v-if="showResults">
+      <p>Your score: {{ score }}/5</p>
+      <p v-for="(result, index) in results" :key="index">
+        Question {{ index + 1 }}: {{ result }}
+      </p>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
-import { defineProps, defineEmits } from 'vue';
-import axios from 'axios';
-import ResultModal from './ResultModal.vue';
+import { ref, onMounted } from "vue";
+import axios from "axios";
 
-const props = defineProps({
-  modalActive: {
-    type: Boolean,
-    default: false,
-  },
-  note: {
-    type: Object,
-    default: null,
-  },
-  userName: {
-    type: String,
-    default: '',
-  }
-});
+const userName = ref([]); // Create a ref to store the questions array
+const results = ref([]); // Create a ref to store the results
+const showResults = ref(false); // Create a ref to control the visibility of results
+const score = ref(0); // Create a ref to store the score
 
-const emit = defineEmits(['close', 'editNote', 'deleteNote']);
-
-const apiResult = ref([]);
-const lastClickedButton = ref('');
-const selectedQuiz = ref('');
-const chatGPTResult = ref(null);
-const showResult = ref(false);
-const score = ref(0);
-
-const close = () => {
-  emit('close');
-};
-
-const processKeywords = (data) => {
-  return data.map((item) => (typeof item === 'string' ? item : item[0]));
-};
-
-const rake = async () => {
-  lastClickedButton.value = 'rake';
-  selectedQuiz.value = 'Rake';
-  chatGPTResult.value = null;
-  if (!props.note) return;
+const getQ = async () => {
   try {
-    const response = await axios.post('http://localhost:5000/api/text/rake', {
-      text: props.note.text,
+    const response = await axios.post("http://localhost:5001/generate-quiz", {
+      subject: "programming",
+      difficulty: "easy",
     });
-    apiResult.value = processKeywords(response.data);
+    // Access the questions array from the response
+    console.log("data", response.data.questions);
+    userName.value = response.data.questions;
   } catch (error) {
-    console.error('Error calling rake API:', error);
-    apiResult.value = ['Error fetching data from rake API'];
-  }
-};
-
-const keybert = async () => {
-  lastClickedButton.value = 'keybert';
-  selectedQuiz.value = 'Keybert';
-  chatGPTResult.value = null;
-  if (!props.note) return;
-  try {
-    const response = await axios.post('http://localhost:5000/api/text/keybert', {
-      text: props.note.text,
-    });
-    apiResult.value = processKeywords(response.data);
-  } catch (error) {
-    console.error('Error calling keybert API:', error);
-    apiResult.value = ['Error fetching data from keybert API'];
-  }
-};
-
-const generateQuiz = async (text) => {
-  selectedQuiz.value = text;
-  score.value = 0;
-  showResult.value = false;
-  try {
-    const response = await axios.post('http://localhost:5001/generate-quiz', {
-      subject: text,
-      difficulty: 'easy',
-    });
-
-    let quizData = response.data;
-
-    if (quizData && quizData.quizzes && quizData.quizzes.length > 0) {
-      quizData.quizzes.forEach((quiz) => {
-        quiz.questions.forEach((question) => {
-          const correctChoice = question.choices.find((choice) => choice.isCorrect);
-          if (correctChoice) {
-            question.answer = correctChoice.value;
-          } else {
-            question.answer = 'Answer not found';
-          }
-        });
-      });
-    }
-
-    chatGPTResult.value = quizData;
-    console.log('Quiz generated:', quizData);
-  } catch (error) {
-    console.error('Error generating quiz:', error);
-    chatGPTResult.value = { quizzes: [], title: 'Error generating quiz' };
+    console.error("Error fetching user data:", error.message);
   }
 };
 
 const compareAnswers = () => {
-  if (!chatGPTResult.value) return;
-
-  const userAnswers = document.querySelectorAll('input[type="radio"]:checked');
-
-  let newScore = 0;
-
-  chatGPTResult.value.quizzes[0].questions.forEach((question, index) => {
-    const correctAnswer = question.answer;
-    const userAnswer = userAnswers[index]?.value;
-    if (userAnswer === correctAnswer) {
-      newScore++;
+  results.value = [];
+  score.value = 0; // Reset score
+  userName.value.forEach((question, questionIndex) => {
+    const selected = document.querySelector(
+      `input[name="question-${questionIndex}"]:checked`
+    );
+    if (selected) {
+      const selectedValue = selected.value;
+      const correctChoice = question.choices.find((choice) => choice.isCorrect);
+      if (correctChoice && selectedValue === correctChoice.value) {
+        results.value.push("Correct");
+        score.value++; // Increment score for correct answers
+      } else {
+        results.value.push("Incorrect");
+      }
+    } else {
+      results.value.push("No answer selected");
     }
   });
-
-  showResult.value = true;
-  score.value = newScore;
+  showResults.value = true;
 };
 
-watch(
-  () => props.note,
-  () => {
-    apiResult.value = [];
-    lastClickedButton.value = '';
-    chatGPTResult.value = null;
-    showResult.value = false;
-    score.value = 0;
-  }
-);
+onMounted(() => {
+  getQ();
+});
 </script>
 
 <style scoped>
 .modal-button.active {
-  background-color: #0056b3;
+  background-color: #0056b3; /* Change to desired color */
 }
 .modal-overlay {
   position: fixed;
@@ -220,10 +101,10 @@ watch(
   padding: 20px;
   border-radius: 10px;
   position: relative;
-  max-height: 80vh;
-  overflow-y: auto;
-  width: 90%;
-  max-width: 600px;
+  max-height: 80vh; /* Set the max height of the modal */
+  overflow-y: auto; /* Enable vertical scrolling */
+  width: 90%; /* Optional: adjust the width */
+  max-width: 600px; /* Optional: set a max-width */
 }
 
 .close-button {
@@ -320,5 +201,18 @@ watch(
 
 .compare-button:hover {
   background-color: #44bece;
+}
+
+.result {
+  margin-top: 20px;
+}
+
+.result h3 {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.active {
+  background-color: #0056b3;
 }
 </style>

@@ -8,26 +8,30 @@
       >
         <div class="note-content">
           <div class="note-header">
-            <p class="note-username">{{ note.uniqueName }}</p>
+            <p class="note-number">{{ index + 1 }}-</p>
+            <!-- Note number -->
+            <p class="note-username" @click="goToUserProfile(note.uniqueName)">
+              {{ note.uniqueName }}
+            </p>
           </div>
           <p class="note-text">{{ note.text }}</p>
-          <p class="note-comment">note:{{ note.userComment }}</p>
-          <a class="note-url" :href="note.url" target="_blank">{{
-            note.url
-          }}</a>
+          <p class="note-comment">note: {{ note.userComment }}</p>
+          <button @click="navigateToUrl(note.url)" class="note-url-button">
+            Go to URL
+          </button>
           {{ new Date(note.creationTime).toLocaleString() }}
         </div>
         <div class="note-actions">
           <icon-wrapper
-            @click="like(note)"
+            @click="toggleLike(note)"
             :iconCode="
               note.liked ? 'icon-park-solid:like' : 'solar:heart-linear'
             "
             class="button-icon"
           ></icon-wrapper>
           <icon-wrapper
-            @click="save(note.id)"
-            iconCode="mingcute:save-line"
+            @click="toggleSave(note)"
+            :iconCode="note.saved ? 'mingcute:save-fill' : 'mingcute:save-line'"
             class="button-icon"
           ></icon-wrapper>
         </div>
@@ -39,95 +43,67 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import iconWrapper from "../components/iconWrapper.vue";
+import { useRouter } from "vue-router";
+const router = useRouter();
 
 const currentUserData = ref({});
 const followingPageData = ref({ notes: [] });
 
-const like = async (note) => {
+const toggleLike = async (note) => {
   try {
     const token = localStorage.getItem("token");
     if (!token) {
       throw new Error("Token not found");
     }
 
-    const currentUserResponse = await fetch(
-      "http://localhost:8081/api/v1/users/currentUser",
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    if (!currentUserResponse.ok) {
-      throw new Error("Failed to fetch current user data");
-    }
-    const currentUserDataJson = await currentUserResponse.json();
-    currentUserData.value = currentUserDataJson.data;
+    const url = `http://localhost:8081/api/v1/users/${currentUserData.value.userName}/${
+      note.liked ? "unlike" : "like"
+    }/${note.id}`;
+    const method = note.liked ? "DELETE" : "POST";
 
-    const likeResponse = await fetch(
-      `http://localhost:8081/api/v1/users/${currentUserData.value.userName}/like/${note.id}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const likeResponse = await fetch(url, {
+      method: method,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
     if (!likeResponse.ok) {
-      throw new Error("Failed to like the note");
+      throw new Error("Failed to like/unlike the note");
     }
-    console.log(`User ${currentUserData.value.userName} liked note ${note.id}`);
-
-    // Toggle the liked state
     note.liked = !note.liked;
   } catch (error) {
-    console.error("Error liking the note:", error);
+    console.error("Error liking/unliking the note:", error);
   }
 };
 
-const save = async (noteId) => {
+const toggleSave = async (note) => {
   try {
     const token = localStorage.getItem("token");
     if (!token) {
       throw new Error("Token not found");
     }
 
-    const currentUserResponse = await fetch(
-      "http://localhost:8081/api/v1/users/currentUser",
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    if (!currentUserResponse.ok) {
-      throw new Error("Failed to fetch current user data");
-    }
-    const currentUserDataJson = await currentUserResponse.json();
-    currentUserData.value = currentUserDataJson.data;
+    const url = `http://localhost:8081/api/v1/users/${currentUserData.value.userName}/${
+      note.saved ? "unsave" : "save"
+    }/${note.id}`;
+    const method = note.saved ? "DELETE" : "POST";
 
-    const saveResponse = await fetch(
-      `http://localhost:8081/api/v1/users/${currentUserData.value.userName}/save/${noteId}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const saveResponse = await fetch(url, {
+      method: method,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
     if (!saveResponse.ok) {
-      throw new Error("Failed to save the note");
+      throw new Error("Failed to save/unsave the note");
     }
-
-    console.log(`User ${currentUserData.value.userName} saved note ${noteId}`);
+    note.saved = !note.saved;
   } catch (error) {
-    console.error("Error saving the note:", error);
+    console.error("Error saving/unsaving the note:", error);
   }
 };
 
@@ -167,13 +143,24 @@ const fetchUserData = async () => {
     }
     followingPageData.value = await followingPageResponse.json();
 
-    // Initialize the liked property for each note
     followingPageData.value.data.notes.forEach((note) => {
-      note.liked = false;
+      note.liked = note.likedByCurrentUser;
+      note.saved = note.savedByCurrentUser;
     });
   } catch (error) {
     console.error("Error fetching data:", error);
   }
+};
+
+const goToUserProfile = (username) => {
+  router.push({ name: "UserProfile", params: { username } });
+};
+
+const navigateToUrl = (url) => {
+  if (!url.startsWith("http://") && !url.startsWith("https://")) {
+    url = "http://" + url;
+  }
+  window.open(url, "_blank");
 };
 
 onMounted(fetchUserData);
@@ -198,13 +185,13 @@ onMounted(fetchUserData);
   background-color: #ffffff;
   margin-bottom: 15px;
   padding: 15px;
-  padding-left: 10px; /* Adjusted padding to move content closer to the left border */
+  padding-left: 10px;
   border: 1px solid #ddd;
   border-radius: 5px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s ease-in-out;
   display: flex;
-  justify-content: space-between; /* Added to position content and actions */
+  justify-content: space-between;
   align-items: flex-start;
 }
 
@@ -226,45 +213,44 @@ onMounted(fetchUserData);
 .note-username {
   font-weight: bold;
   color: #333;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
 }
 
 .note-text {
-  font-size: 1.3em;
+  color: #666;
   margin-bottom: 10px;
-  color: #555;
 }
 
 .note-comment {
-  font-style: italic;
+  color: #999;
   margin-bottom: 10px;
-  color: #555;
 }
 
-.note-url {
-  font-size: 0.9em;
-  color: #007bff; /* Link color */
-  text-decoration: underline; /* Underline link */
+.note-url-button {
+  color: #007bff;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 10px;
 }
 
-.note-time {
-  font-size: 0.5em;
-  color: #57ade6;
+.note-url-button:hover {
+  text-decoration: none;
 }
 
 .note-actions {
   display: flex;
-  gap: 10px;
-  align-self: flex-start;
+  align-items: center;
 }
 
 .button-icon {
-  font-size: 1.5em;
-  color: #555;
   cursor: pointer;
+  margin-right: 10px;
+  color: #007bff;
 }
 
 .button-icon:hover {
-  color: #007bff;
+  color: #0056b3;
 }
 </style>

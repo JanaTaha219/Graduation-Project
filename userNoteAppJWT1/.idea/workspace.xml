@@ -5,10 +5,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="25ed1d43-cd0f-44be-a4ae-3ad04348df45" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../Python-Servers/recommendation_systems.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../Python-Servers/recommendation_systems.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Python-Servers/recommendation_systems.py" beforeDir="false" afterPath="$PROJECT_DIR$/../Python-Servers/recommendation_systems.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front-end/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/../front-end/app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front-end/cosine.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front-end/cosine.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front-end/src/components/ResultModal.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../front-end/src/components/ResultModal.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front-end/src/components/fl.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../front-end/src/components/fl.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front-end/src/components/fy.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../front-end/src/components/fy.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front-end/src/components/modalProfile.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../front-end/src/components/modalProfile.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front-end/src/router/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../front-end/src/router/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front-end/src/views/dashBoard.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../front-end/src/views/dashBoard.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front-end/src/views/logIn.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../front-end/src/views/logIn.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front-end/src/views/profile.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../front-end/src/views/profile.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front-end/src/views/saved.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../front-end/src/views/saved.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front-end/src/views/signUp.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../front-end/src/views/signUp.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/zh2t/controllers/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/zh2t/controllers/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/zh2t/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/zh2t/service/UserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/zh2t/service/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/zh2t/service/UserServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -153,12 +165,28 @@
       <workItem from="1719078182414" duration="2396000" />
       <workItem from="1719090947380" duration="1582000" />
       <workItem from="1719128821042" duration="2496000" />
-      <workItem from="1719167839410" duration="1771000" />
+      <workItem from="1719167839410" duration="2241000" />
+      <workItem from="1719218676107" duration="1229000" />
+      <workItem from="1719262860669" duration="1821000" />
+      <workItem from="1719349957900" duration="802000" />
+      <workItem from="1719385621245" duration="1880000" />
+      <workItem from="1719388662430" duration="897000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="XDebuggerManager">
     <watches-manager>

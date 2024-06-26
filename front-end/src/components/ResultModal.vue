@@ -20,7 +20,7 @@
       </div>
 
       <div v-if="score < 3 && videos.length">
-        <h4>To study more about this topic, watch these videos:</h4>
+        <h4>to study more about this topic by these videos</h4>
         <div v-for="video in videos" :key="video.id.videoId" class="video">
           <iframe
             width="100%"
@@ -40,6 +40,7 @@
 <script setup>
 import { defineProps, defineEmits, ref, watch, onMounted } from "vue";
 import axios from "axios";
+import { onMessage } from "firebase/messaging";
 
 const props = defineProps({
   show: {
@@ -58,35 +59,12 @@ const props = defineProps({
     type: String,
     default: "",
   },
- 
-  subject: {
-    type: String,
-    default: "",
-  },
 });
 
 const emit = defineEmits(["close"]);
-const currentUserName=ref("")
-const videos = ref([]);
-const fetchUserName = async () => {
-      const token = localStorage.getItem('token'); // Adjust this according to where you store the token
-      if (!token) {
-        console.error('No token found');
-        return;
-      }
 
-      try {
-        const response = await axios.get('http://localhost:8081/api/v1/users/currentUser', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        currentUserName.value = response.data.userName;
-        
-      } catch (error) {
-        console.error('Error fetching user name:', error);
-      }
-    };
+const videos = ref([]);
+
 const fetchYouTubeVideos = async (query) => {
   const apiKey = "AIzaSyAelMhgbXmlE2qLhLSWAb1syefc_ZG1WLE"; // Replace with your actual API key
   const maxResults = 5; // Number of videos to fetch
@@ -104,32 +82,11 @@ const fetchYouTubeVideos = async (query) => {
   }
 };
 
-const sendResultToApi = async () => {
-  fetchUserName();
-  const url = "http://localhost:5000/add_mark";
-  const data = {
-    user_id: currentUserName.value ,
-    quiz_type: props.subject,
-    mark: props.score,
-  };
-  console.log(data)
-
-  try {
-    const response = await axios.post(url, data);
-    console.log("Result sent to API:", response.data);
-  } catch (error) {
-    console.error("Error sending result to API:", error);
-  }
-};
-
 watch(
   () => props.show,
   async (newVal) => {
-    if (newVal) {
-      if (props.selectedQuiz) {
-        await fetchYouTubeVideos(props.selectedQuiz);
-      }
-      await sendResultToApi();
+    if (newVal && props.selectedQuiz) {
+      await fetchYouTubeVideos(props.selectedQuiz);
     }
   }
 );

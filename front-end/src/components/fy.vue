@@ -1,47 +1,35 @@
 <template>
-  <div>
-    <div class="action-buttons">
-      <button class="action-button" @click="getRecommendationsCosine()">
-        cosine
-      </button>
-      <button class="action-button" @click="getRecommendationsEu()">
-        euclidean
-      </button>
-      <button class="action-button" @click="getRecommendationsDot()">
-        dot product
-      </button>
-      <!-- Display selected method here -->
-    </div>
+  <div class="container">
     <p class="selected-method">{{ selectedMethod }}</p>
     <div class="filter-container">
-      <input
-        type="number"
-        v-model="similarityThreshold"
-        placeholder="Enter similarity threshold"
-        class="threshold-input"
-      />
-      <button @click="filterNotesBySimilarity" class="filter-button">
-        Filter
-      </button>
+      <div>
+        <button @click="filterNotes(0, 0.2)" class="filter-button">low</button>
+        <button @click="filterNotes(0.2, 0.7)" class="filter-button">
+          medium
+        </button>
+        <button @click="filterNotes(0.7, 1)" class="filter-button">high</button>
+        <button @click="reset()" class="filter-button">reset</button>
+      </div>
     </div>
-
     <ul class="note-list">
-      <li class="note-item" v-for="note in notes" :key="note.id">
+      <li class="note-item" v-for="note in filteredNotes" :key="note.id">
         <div class="note-content">
           <div class="note-header">
-            <p class="note-username">{{ note.user_id }}</p>
+            <p class="note-username" @click="goToUserProfile(note.user_id)">
+              {{ note.user_id }}
+            </p>
           </div>
           <p class="note-text">{{ note.text }}</p>
           <p class="note-comment">{{ note.comment }}</p>
-          <a class="note-url" :href="note.url" target="_blank">{{
-            note.url
-          }}</a>
+          <button @click="navigateToUrl(note.url)" class="note-url-button">
+            Go to URL
+          </button>
           <p class="note-time">{{ note.creation_time }}</p>
           <p>{{ note.similarity }}</p>
         </div>
         <div class="note-actions">
           <div class="icon-group">
-            <iconWrapper
+            <IconWrapper
               @click="toggleLike(note.id)"
               :iconCode="
                 likedNotes.has(note.id)
@@ -49,8 +37,8 @@
                   : 'solar:heart-linear'
               "
               class="button-icon"
-            ></iconWrapper>
-            <iconWrapper
+            ></IconWrapper>
+            <IconWrapper
               @click="toggleSave(note.id)"
               :iconCode="
                 savedNotes.has(note.id)
@@ -58,7 +46,7 @@
                   : 'mingcute:save-line'
               "
               class="button-icon"
-            ></iconWrapper>
+            ></IconWrapper>
           </div>
           <button
             v-if="!followedUsers.has(note.user_id)"
@@ -66,120 +54,51 @@
             class="dashboard-button"
           >
             <div>
-              <icon-wrapper
-                iconCode="mdi:add"
-                class="button-icon"
-              ></icon-wrapper>
+              <IconWrapper iconCode="mdi:add" class="button-icon"></IconWrapper>
             </div>
           </button>
-          <button class="note-button" @click="showModal(note)">
+          <button class="note-button" @click="tryy(note.text)">
             Show Modal
           </button>
         </div>
       </li>
     </ul>
-    <NoteModal
-      :modalActive="isModalActive"
-      :note="currentNote"
-      @close="isModalActive = false"
-    />
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from "vue";
 import axios from "axios";
-import iconWrapper from "../components/iconWrapper.vue";
-import NoteModal from "../components/modalProfile.vue"; // Import the modal component
-const similarityThreshold = ref(null); // Store the similarity threshold entered by the user
+import IconWrapper from "../components/iconWrapper.vue";
+import { useRouter } from "vue-router";
 
-const clearThreshold = () => {
-  similarityThreshold.value = null; // Clear the similarity threshold
-};
-const currentNote = ref(null);
-
-const numberOfPosts = ref(100);
-const notes = ref([]);
-const currentUserId = ref(" ");
-const currentUsername = ref(null);
-const currentUserData = ref(" ");
+const originalNotes = ref([]);
+const filteredNotes = ref([]);
 const likedNotes = ref(new Set());
 const savedNotes = ref(new Set());
 const followedUsers = ref(new Set());
 const selectedMethod = ref("");
-const selectedMethod2 = ref("");
-const isModalActive = ref(false);
-const filterNotesBySimilarity = () => {
-  if (similarityThreshold.value === null || similarityThreshold.value === "") {
-    // Check if the input is empty or null
-    return;
+const router = useRouter();
+const navigateToUrl = (url) => {
+  if (!url.startsWith("http://") && !url.startsWith("https://")) {
+    url = "http://" + url;
   }
-
-  // Convert the input to a number
-  const threshold = parseFloat(similarityThreshold.value);
-
-  // Filter the notes based on the similarity threshold
-  notes.value = notes.value.filter(
-    (note) => parseFloat(note.similarity) >= threshold
-  );
+  window.open(url, "_blank");
 };
-const showModal = (note) => {
-  currentNote.value = note;
-  isModalActive.value = true;
-};
-const rake = async () => {
-  selectedMethod2.value = "rake";
-
-  try {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      throw new Error("Token not found");
-    }
-    console.log("Token:", token);
-
-    const currentUserResponse = await fetch(
-      "http://localhost:8081/api/v1/users/currentUser",
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    if (!currentUserResponse.ok) {
-      throw new Error("Failed to fetch current user data");
-    }
-    const currentUserDataJson = await currentUserResponse.json();
-    currentUserData.value = currentUserDataJson.data;
-    console.log("text", currentNote.value.text);
-
-    const response = await axios.post("http://localhost:5000/api/text/rake", {
-      text: currentNote.value.text,
-    });
-
-    notes.value = response.data;
-    console.log("rake", notes.value);
-  } catch (error) {
-    console.error("Error fetching recommendations:", error);
-  }
+const goToUserProfile = (username) => {
+  router.push({ name: "UserProfile", params: { username } });
 };
 
-const keybert = () => {
-  selectedMethod2.value = "keybert";
+const reset = async () => {
+  getRecommendationsCosine();
 };
 
 const getRecommendationsCosine = async () => {
-  selectedMethod.value = "cosine";
-  clearThreshold();
-
   try {
     const token = localStorage.getItem("token");
     if (!token) {
       throw new Error("Token not found");
     }
-    console.log("Token:", token);
-
     const currentUserResponse = await fetch(
       "http://localhost:8081/api/v1/users/currentUser",
       {
@@ -194,97 +113,25 @@ const getRecommendationsCosine = async () => {
       throw new Error("Failed to fetch current user data");
     }
     const currentUserDataJson = await currentUserResponse.json();
-    currentUserData.value = currentUserDataJson.data;
+    const currentUserData = currentUserDataJson.data;
     const response = await axios.post("http://localhost:5000/api/predict", {
-      username: currentUserData.value.userName,
+      username: currentUserData.userName,
       numberOfPosts: 100,
     });
-
-    notes.value = response.data;
-    console.log("heelo", notes.value);
+    originalNotes.value = response.data;
+    filteredNotes.value = response.data;
   } catch (error) {
     console.error("Error fetching recommendations:", error);
   }
 };
-const getRecommendationsEu = async () => {
-  selectedMethod.value = "euclidean Distances";
-  clearThreshold();
 
-  try {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      throw new Error("Token not found");
-    }
-    console.log("Token:", token);
-
-    const currentUserResponse = await fetch(
-      "http://localhost:8081/api/v1/users/currentUser",
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    if (!currentUserResponse.ok) {
-      throw new Error("Failed to fetch current user data");
-    }
-    const currentUserDataJson = await currentUserResponse.json();
-    currentUserData.value = currentUserDataJson.data;
-    const response = await axios.post(
-      "http://localhost:5000/api/predict/euclideanDistances",
-      {
-        username: currentUserData.value.userName,
-        numberOfPosts: 100,
-      }
-    );
-
-    notes.value = response.data;
-    console.log("eu", notes.value);
-  } catch (error) {
-    console.error("Error fetching recommendations:", error);
-  }
-};
-const getRecommendationsDot = async () => {
-  selectedMethod.value = "dot product";
-  clearThreshold();
-
-  try {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      throw new Error("Token not found");
-    }
-    console.log("Token:", token);
-
-    const currentUserResponse = await fetch(
-      "http://localhost:8081/api/v1/users/currentUser",
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    if (!currentUserResponse.ok) {
-      throw new Error("Failed to fetch current user data");
-    }
-    const currentUserDataJson = await currentUserResponse.json();
-    currentUserData.value = currentUserDataJson.data;
-    const response = await axios.post(
-      "http://localhost:5000/api/predict/dotProduct",
-      {
-        username: currentUserData.value.userName,
-        numberOfPosts: 100,
-      }
-    );
-
-    notes.value = response.data;
-    console.log("dot", notes.value);
-  } catch (error) {
-    console.error("Error fetching recommendations:", error);
-  }
+const filterNotes = (minSimilarity, maxSimilarity) => {
+  minSimilarity = parseFloat(minSimilarity);
+  maxSimilarity = parseFloat(maxSimilarity);
+  filteredNotes.value = originalNotes.value.filter((note) => {
+    const noteSimilarity = parseFloat(note.similarity);
+    return noteSimilarity >= minSimilarity && noteSimilarity <= maxSimilarity;
+  });
 };
 
 const toggleLike = async (noteId) => {
@@ -293,7 +140,6 @@ const toggleLike = async (noteId) => {
     if (!token) {
       throw new Error("Token not found");
     }
-
     const currentUserResponse = await fetch(
       "http://localhost:8081/api/v1/users/currentUser",
       {
@@ -308,24 +154,20 @@ const toggleLike = async (noteId) => {
       throw new Error("Failed to fetch current user data");
     }
     const currentUserDataJson = await currentUserResponse.json();
-    currentUserData.value = currentUserDataJson.data;
-
+    const currentUserData = currentUserDataJson.data;
     if (likedNotes.value.has(noteId)) {
-      // Unlike the note
       await axios.delete(
-        `http://localhost:8081/api/v1/users/${currentUserData.value.userName}/unlike/${noteId}`,
+        `http://localhost:8081/api/v1/users/${currentUserData.userName}/unlike/${noteId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
       );
-
       likedNotes.value.delete(noteId);
     } else {
-      // Like the note
       await axios.post(
-        `http://localhost:8081/api/v1/users/${currentUserData.value.userName}/like/${noteId}`,
+        `http://localhost:8081/api/v1/users/${currentUserData.userName}/like/${noteId}`,
         {},
         {
           headers: {
@@ -336,7 +178,7 @@ const toggleLike = async (noteId) => {
       likedNotes.value.add(noteId);
     }
   } catch (error) {
-    console.log(error);
+    console.error("Error toggling like:", error);
   }
 };
 
@@ -346,7 +188,6 @@ const toggleSave = async (noteId) => {
     if (!token) {
       throw new Error("Token not found");
     }
-
     const currentUserResponse = await fetch(
       "http://localhost:8081/api/v1/users/currentUser",
       {
@@ -361,24 +202,20 @@ const toggleSave = async (noteId) => {
       throw new Error("Failed to fetch current user data");
     }
     const currentUserDataJson = await currentUserResponse.json();
-    currentUserData.value = currentUserDataJson.data;
-
+    const currentUserData = currentUserDataJson.data;
     if (savedNotes.value.has(noteId)) {
-      // Unlike the note
       await axios.delete(
-        `http://localhost:8081/api/v1/users/${currentUserData.value.userName}/unsave/${noteId}`,
+        `http://localhost:8081/api/v1/users/${currentUserData.userName}/unsave/${noteId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
       );
-
       savedNotes.value.delete(noteId);
     } else {
-      // Like the note
       await axios.post(
-        `http://localhost:8081/api/v1/users/${currentUserData.value.userName}/save/${noteId}`,
+        `http://localhost:8081/api/v1/users/${currentUserData.userName}/save/${noteId}`,
         {},
         {
           headers: {
@@ -389,7 +226,7 @@ const toggleSave = async (noteId) => {
       savedNotes.value.add(noteId);
     }
   } catch (error) {
-    console.log(error);
+    console.error("Error toggling save:", error);
   }
 };
 
@@ -399,7 +236,6 @@ const follow = async (userIdB) => {
     if (!token) {
       throw new Error("Token not found");
     }
-
     const currentUserResponse = await fetch(
       "http://localhost:8081/api/v1/users/currentUser",
       {
@@ -410,16 +246,13 @@ const follow = async (userIdB) => {
         },
       }
     );
-
     if (!currentUserResponse.ok) {
       throw new Error("Failed to fetch current user data");
     }
-
     const currentUserDataJson = await currentUserResponse.json();
-    currentUserData.value = currentUserDataJson.data;
-
+    const currentUserData = currentUserDataJson.data;
     const response = await axios.post(
-      `http://localhost:8081/api/v1/users/${currentUserData.value.userName}/follow/${userIdB}`,
+      `http://localhost:8081/api/v1/users/${currentUserData.userName}/follow/${userIdB}`,
       {},
       {
         headers: {
@@ -427,7 +260,6 @@ const follow = async (userIdB) => {
         },
       }
     );
-
     if (response.status === 200) {
       followedUsers.value.add(userIdB);
     } else {
@@ -438,12 +270,16 @@ const follow = async (userIdB) => {
   }
 };
 
+const tryy = (noteText) => {
+  router.push({ path: "/tryy", query: { text: noteText } });
+};
+
 onMounted(() => {
   getRecommendationsCosine();
 });
 </script>
 
-<style scoped>
+<style>
 .container {
   max-width: 800px;
   margin: 0 auto;
@@ -554,12 +390,14 @@ onMounted(() => {
   transition: background-color 0.3s ease;
   margin: 0 10px; /* Add some horizontal spacing between buttons */
 }
+
 .selected-method {
   margin-top: 10px;
   font-weight: bold;
   color: #555;
   margin-bottom: 70px;
 }
+
 .action-button:hover {
   background-color: #495057;
 }
@@ -577,6 +415,7 @@ onMounted(() => {
 .note-button:hover {
   background-color: #0056b3;
 }
+
 .filter-container {
   margin-top: 20px;
 }

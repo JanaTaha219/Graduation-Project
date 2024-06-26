@@ -26,6 +26,13 @@
       <div class="form-group">
         <button type="submit" class="btn-login">Log In</button>
       </div>
+      <div>
+        <p>
+          <router-link to="/forgot-password" class="btn-forgot"
+            >Forgot Password ?</router-link
+          >
+        </p>
+      </div>
       <div class="signup-option">
         <p>
           Don't have an account?
@@ -132,10 +139,8 @@ const login = () => {
   padding: 10px;
   border: none;
   border-radius: 5px;
-  background-color: blueviolet;
-  /* Button background color */
-  color: #ffffff;
-  /* Button text color */
+  background-color: blueviolet; /* Button background color */
+  color: #ffffff; /* Button text color */
   font-weight: bold;
   cursor: pointer;
 }
@@ -164,7 +169,7 @@ const login = () => {
 
 .notification {
   position: fixed;
-  bottom: 200px; /* Adjust the bottom value to lift the notification up */
+  bottom: 100px; /* Adjust the bottom value to lift the notification up */
   left: 50%;
   transform: translateX(-50%);
   color: red;
